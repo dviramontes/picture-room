@@ -8,6 +8,7 @@
             [ring.middleware.webjars :refer [wrap-webjars]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
+            [ring.middleware.json :refer [wrap-json-response]]
             [ring.middleware.format :refer [wrap-restful-format]])
   (:import [javax.servlet ServletContext]))
 
@@ -55,6 +56,7 @@
 
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
+      wrap-json-response
       wrap-formats
       wrap-webjars
       wrap-flash

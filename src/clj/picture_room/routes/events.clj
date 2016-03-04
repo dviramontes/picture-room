@@ -1,17 +1,19 @@
 (ns picture-room.routes.events
   (:require
     [compojure.core :refer [defroutes GET]]
-    [ring.util.http-response :as response]))
+    [environ.core :refer [env]]
+    ;; [fb-graph-clj.core :as fb]
+    [ring.util.response :refer [response]]))
 
-(defn home-page []
-  (layout/render
-    "home.html" {:docs (-> "docs/docs.md" io/resource slurp)}))
+(def ac (env :access-token))
 
-(defn about-page []
-  (layout/render "about.html"))
+#_(fb/with-access-token
+  ac
+  (fb/pull [:pictureroomnyc :events]))
 
-(defroutes home-routes
-           (GET "/" [] (home-page))
-           (GET "/about" [] (about-page)))
+(defn fb-events []
+  (let []
+    (response {:test "foo"})))
 
-
+(defroutes event-routes
+           (GET "/events" [] (fb-events)))
