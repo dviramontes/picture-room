@@ -9,7 +9,7 @@
 
 (defn fb-events []
   (let [events (fb/with-access-token ac (fb/pull [:pictureroomnyc :events]))]
-    (response events)))
+    (response {:data (:data (:body events))})))
 
 (defroutes event-routes
            (GET "/events" [] (fb-events)))

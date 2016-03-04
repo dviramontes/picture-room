@@ -5,6 +5,7 @@
             [picture-room.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
             [immutant.web.middleware :refer [wrap-session]]
+            [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.webjars :refer [wrap-webjars]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
@@ -66,4 +67,6 @@
             (assoc-in [:security :anti-forgery] false)
             (dissoc :session)))
       wrap-context
+      (wrap-cors :access-control-allow-origin [#".+"]
+                 :access-control-allow-methods [:get])
       wrap-internal-error))
