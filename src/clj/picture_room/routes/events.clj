@@ -2,18 +2,14 @@
   (:require
     [compojure.core :refer [defroutes GET]]
     [environ.core :refer [env]]
-    ;; [fb-graph-clj.core :as fb]
+    [fb-graph-clj.core :as fb]
     [ring.util.response :refer [response]]))
 
-(def ac (env :access-token))
-
-#_(fb/with-access-token
-  ac
-  (fb/pull [:pictureroomnyc :events]))
+(def ac (or (env :access-token) (System/getenv "ACCESS_TOKEN")))
 
 (defn fb-events []
-  (let []
-    (response {:test "foo"})))
+  (let [events (fb/with-access-token ac (fb/pull [:pictureroomnyc :events]))]
+    (response events)))
 
 (defroutes event-routes
            (GET "/events" [] (fb-events)))
