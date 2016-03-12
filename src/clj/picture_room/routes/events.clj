@@ -2,15 +2,27 @@
   (:require
     [compojure.core :refer [defroutes GET]]
     [environ.core :refer [env]]
-    [fb-graph-clj.core :as fb]
-    ;; [ring.util.http-response :as res]
+    [clj-facebook-graph.auth :refer [with-facebook-auth]]
+    [clj-facebook-graph [client :as client]]
     [ring.util.response :refer [response]]))
 
-(def ac (or (env :access-token) (System/getenv "ACCESS_TOKEN")))
+(def ac {:access-token (or (env :access-token) (System/getenv "ACCESS_TOKEN"))})
 
-(defn fb-events []
-  (let [events (fb/with-access-token ac (fb/pull [:pictureroomnyc :events]))]
-    (response (:body events))))
+(defn get-fb-events []
+  (let [events-request (with-facebook-auth ac (client/get [:pictureroomnyc :events] {:extract :data}))
+        event-pic-urls-request (with-facebook-auth
+                                  ac
+                                  (client/get [:pictureroomnyc :events]
+                                              {:extract :data
+                                               :query-params {:fields "events,picture,url"}}))
+        flatten-pic-urls (mapv #(:id %) event-pic-urls-request)
+        join-requests (map (fn [e]
+                            (let [index (.indexOf flatten-pic-urls (:id e))
+                                  pic-url (get-in (get event-pic-urls-request index)
+                                                      [:picture :data :url])]
+                              (assoc e :picture_url pic-url))) events-request)]
+
+    (response {:data join-requests})))
 
 (defroutes event-routes
-           (GET "/events" [] (fb-events)))
+           (GET "/events" [] (get-fb-events)))

@@ -22,14 +22,14 @@
                  [mount "0.1.10"]
                  [cprop "0.1.6"]
                  [environ "1.0.2"]
-                 [fb-graph-clj "1.0.0-SNAPSHOT"]
                  [ring/ring-json "0.4.0"]
                  [org.clojure/tools.cli "0.3.3"]
                  [luminus-nrepl "0.1.4"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [luminus-immutant "0.1.8"]
                  [luminus-log4j "0.1.3"]
-                 [ring-cors "0.1.7"]]
+                 [ring-cors "0.1.7"]
+                 [clj-facebook-graph "0.4.0"]]
 
   :min-lein-version "2.0.0"
 
