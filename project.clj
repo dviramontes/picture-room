@@ -29,7 +29,10 @@
                  [luminus-immutant "0.1.8"]
                  [luminus-log4j "0.1.3"]
                  [ring-cors "0.1.7"]
-                 [clj-facebook-graph "0.4.0"]]
+                 [clj-facebook-graph "0.4.0"]
+                 [http-kit "2.1.18"]
+                 [org.clojure/core.async "0.2.374"]
+                 [cheshire "5.5.0"]]
 
   :min-lein-version "2.0.0"
 
